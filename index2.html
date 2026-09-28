@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKVELLO Watches | Premium Watches for Men & Women</title>
+    <meta name="description" content="Shop AKVELLO Watches — stylish timepieces for men and women.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        akvello: {
+                            black: '#0D0D0D',
+                            charcoal: '#1A1A1A',
+                            darkGray: '#2A2A2A',
+                            gold: '#D4AF37',
+                            goldLight: '#F3E5AB',
+                            goldDark: '#AA820A',
+                            offwhite: '#FAFAFA',
+                            lightGray: '#F3F4F6'
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAFAFA; color: #1A1A1A; }
+        .font-brand { font-family: 'Cinzel', serif; }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        .whatsapp-float { animation: pulse-glow 2s infinite; }
+    </style>
+</head>
+<body class="bg-akvello-offwhite text-akvello-charcoal flex flex-col min-h-screen">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/923164252822?text=Hello%20AKVELLO%20WATCHES!" target="_blank" 
+       class="whatsapp-float fixed bottom-6 left-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-2xl hover:scale-110 transition-transform duration-300" 
+       title="Chat with AKVELLO on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Top Banner -->
+    <div class="bg-akvello-black text-akvello-gold text-xs py-2 text-center tracking-widest uppercase border-b border-akvello-gold/20 flex justify-center items-center gap-2">
+        <span><i class="fa-solid fa-truck-fast text-akvello-gold mr-1"></i> EASY WHATSAPP ORDERING • CASH ON DELIVERY</span>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-akvello-black text-white border-b border-akvello-gold/20 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" onclick="navigateTo('home'); return false;" class="text-2xl sm:text-3xl font-brand font-bold tracking-widest text-white flex items-center gap-2">
+                <span class="text-akvello-gold font-serif">AKVELLO</span> <span class="text-xs tracking-widest font-sans font-light hidden sm:inline-block border-l border-white/20 pl-2 text-gray-400">WATCHES</span>
+            </a>
+            <nav class="hidden lg:flex items-center space-x-8 text-xs uppercase tracking-widest font-medium">
+                <a href="#" onclick="navigateTo('home'); return false;" class="hover:text-akvello-gold transition-colors">Home</a>
+                <a href="#" onclick="filterAndNavigate('Men'); return false;" class="hover:text-akvello-gold transition-colors">Men</a>
+                <a href="#" onclick="filterAndNavigate('Women'); return false;" class="hover:text-akvello-gold transition-colors">Women</a>
+                <a href="#" onclick="navigateTo('shop'); return false;" class="hover:text-akvello-gold transition-colors">Collections</a>
+            </nav>
+            <div class="flex items-center space-x-5 text-lg">
+                <button onclick="openAdminModal()" class="hover:text-akvello-gold transition-colors text-sm border border-akvello-gold/40 px-2.5 py-1 rounded text-akvello-gold font-mono flex items-center gap-1">
+                    <i class="fa-solid fa-lock"></i> <span>Admin</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dynamic Content Area -->
+    <main id="main-content" class="flex-grow"></main>
+
+    <!-- Footer -->
+    <footer class="bg-akvello-black text-white pt-12 pb-8 border-t border-akvello-gold/20 mt-16 text-center text-xs text-gray-400">
+        <p>&copy; 2026 AKVELLO WATCHES. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Customer Order Form Modal -->
+    <div id="order-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white p-6 rounded-lg max-w-md w-full border border-akvello-gold relative shadow-2xl">
+            <button onclick="closeOrderModal()" class="absolute top-3 right-3 text-gray-400 hover:text-black text-sm">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="font-brand font-bold text-lg mb-1 text-center">Place Order on WhatsApp</h3>
+            <p id="order-watch-title" class="text-xs text-akvello-gold font-bold text-center mb-4"></p>
+            
+            <form onsubmit="handleWhatsAppOrder(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="order-watch-id">
+                <div>
+                    <label class="block font-bold mb-1">Full Name *</label>
+                    <input type="text" id="cust-name" required placeholder="Ali Khan" class="w-full border p-2.5 rounded focus:outline-none focus:border-akvello-gold">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1">Phone Number *</label>
+                    <input type="tel" id="cust-phone" required placeholder="03001234567" class="w-full border p-2.5 rounded focus:outline-none focus:border-akvello-gold">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1">Complete Delivery Address *</label>
+                    <textarea id="cust-address" required rows="3" placeholder="House #, Street #, Sector/Area, City" class="w-full border p-2.5 rounded focus:outline-none focus:border-akvello-gold"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-3 rounded text-xs uppercase tracking-widest transition-colors flex items-center justify-center gap-2 mt-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Send Order On WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Password Protection Modal -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white p-6 rounded-lg max-w-sm w-full border border-akvello-gold text-center relative shadow-2xl">
+            <button onclick="closeAdminModal()" class="absolute top-3 right-3 text-gray-400 hover:text-black text-sm">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="w-12 h-12 bg-akvello-black text-akvello-gold rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <h3 class="font-brand font-bold text-lg mb-1">Admin Verification</h3>
+            <p class="text-xs text-gray-500 mb-4">Enter master password to manage catalog</p>
+            <input type="password" id="admin-pass-input" placeholder="Enter Password" class="w-full border border-gray-300 rounded p-2.5 text-xs mb-3 text-center focus:outline-none focus:border-akvello-gold">
+            <p id="admin-pass-error" class="text-red-500 text-[11px] mb-3 hidden">Incorrect Password!</p>
+            <button onclick="verifyAdminPassword()" class="w-full bg-akvello-black text-white font-bold py-2.5 rounded text-xs uppercase tracking-widest hover:bg-akvello-gold hover:text-black transition-colors">
+                Login
+            </button>
+        </div>
+    </div>
+
+  
+    <script>
+        const ADMIN_PASSWORD = "akvello123";
+        const OWNER_WHATSAPP = "923164252822"; // Aapka WhatsApp Number
+        let isAdminLoggedIn = false;
+
+        const initialProducts = [
+            {
+                id: 'AKV-101',
+                name: 'AKVELLO A-101 Chrono',
+                gender: 'Men',
+                collection: 'Classic',
+                price: 8999,
+                salePrice: 7999,
+                description: 'A clean, versatile timepiece designed for everyday wear.',
+                images: ['https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop']
+            },
+            {
+                id: 'AKV-102',
+                name: 'AKVELLO A-102 Onyx',
+                gender: 'Men',
+                collection: 'Everyday',
+                price: 9499,
+                salePrice: 8499,
+                description: 'Brushed metal finish designed for business and formal attire.',
+                images: ['https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=800&auto=format&fit=crop']
+            },
+            {
+                id: 'AKV-201',
+                name: 'AKVELLO E-201 Rose Elegance',
+                gender: 'Women',
+                collection: 'Elegance',
+                price: 7999,
+                salePrice: 6999,
+                description: 'Sophisticated minimalist dial framed with modern warm gold accents.',
+                images: ['https://images.unsplash.com/photo-1526045612212-70caf35c14df?q=80&w=800&auto=format&fit=crop']
+            }
+        ];
+
+        let storeData = {
+            products: JSON.parse(localStorage.getItem('akvello_products')) || initialProducts
+        };
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'bg-akvello-black border border-akvello-gold text-white text-xs px-4 py-3 rounded shadow-xl';
+            toast.innerText = msg;
+            document.getElementById('toast-container').appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function navigateTo(view, param = null) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const main = document.getElementById('main-content');
+            
+            switch(view) {
+                case 'home': main.innerHTML = renderHomepage(); break;
+                case 'shop': main.innerHTML = renderShopPage(param); break;
+                case 'product': main.innerHTML = renderProductDetailPage(param); break;
+                case 'admin': 
+                    if (!isAdminLoggedIn) {
+                        openAdminModal();
+                        return;
+                    }
+                    main.innerHTML = renderAdminDashboard(); 
+                    break;
+                default: main.innerHTML = renderHomepage();
+            }
+        }
+
+        function filterAndNavigate(gender) {
+            navigateTo('shop', { gender: gender });
+        }
+
+        function openAdminModal() {
+            if (isAdminLoggedIn) {
+                navigateTo('admin');
+                return;
+            }
+            document.getElementById('admin-modal').classList.remove('hidden');
+            document.getElementById('admin-pass-input').value = '';
+            document.getElementById('admin-pass-error').classList.add('hidden');
+            document.getElementById('admin-pass-input').focus();
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function verifyAdminPassword() {
+            const entered = document.getElementById('admin-pass-input').value;
+            if (entered === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                closeAdminModal();
+                showToast('Login Successful!');
+                navigateTo('admin');
+            } else {
+                document.getElementById('admin-pass-error').classList.remove('hidden');
+            }
+        }
+
+        
+        function openOrderModal(watchId) {
+            const product = storeData.products.find(p => p.id === watchId);
+            if (!product) return;
+            document.getElementById('order-watch-id').value = product.id;
+            document.getElementById('order-watch-title').innerText = `${product.name} — Rs. ${(product.salePrice || product.price).toLocaleString()}`;
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-phone').value = '';
+            document.getElementById('cust-address').value = '';
+            document.getElementById('order-modal').classList.remove('hidden');
+        }
+
+        function closeOrderModal() {
+            document.getElementById('order-modal').classList.add('hidden');
+        }
+
+        function handleWhatsAppOrder(e) {
+            e.preventDefault();
+            const watchId = document.getElementById('order-watch-id').value;
+            const product = storeData.products.find(p => p.id === watchId);
+            
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const address = document.getElementById('cust-address').value;
+            const price = product ? (product.salePrice || product.price) : 0;
+
+           
+            const message = `Hello AKVELLO WATCHES! I want to order this watch:%0A%0A` +
+                `⌚ *Watch Name:* ${product ? product.name : ''}%0A` +
+                `💰 *Price:* Rs. ${price.toLocaleString()}%0A` +
+                `👤 *Customer Name:* ${name}%0A` +
+                `📞 *Phone:* ${phone}%0A` +
+                `📍 *Delivery Address:* ${address}%0A%0A` +
+                `Please confirm my order!`;
+
+            closeOrderModal();
+            
+           
+            window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${message}`, '_blank');
+        }
+
+        function renderHomepage() {
+            return `
+                <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-2xl font-brand font-bold mb-6 text-center text-akvello-charcoal">FEATURED TIMEPIECES</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${storeData.products.length ? storeData.products.map(p => renderProductCard(p)).join('') : '<p class="col-span-full text-center text-gray-400 py-10">No watches available right now.</p>'}
+                    </div>
+                </section>
+            `;
+        }
+
+        function renderProductCard(product) {
+            return `
+                <div class="bg-white rounded border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                    <div class="relative aspect-square cursor-pointer bg-gray-100" onclick="navigateTo('product', '${product.id}')">
+                        <img src="${product.images[0]}" alt="${product.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex flex-col flex-grow justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold font-mono text-akvello-gold uppercase">${product.gender}</span>
+                            <h3 class="font-brand font-bold text-sm text-akvello-charcoal my-1">${product.name}</h3>
+                            <p class="text-xs text-gray-500 line-clamp-2">${product.description}</p>
+                        </div>
+                        <div class="mt-4">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-base font-bold text-akvello-black">Rs. ${(product.salePrice || product.price).toLocaleString()}</span>
+                                ${product.salePrice ? `<span class="text-xs text-gray-400 line-through">Rs. ${product.price.toLocaleString()}</span>` : ''}
+                            </div>
+                            <button onclick="openOrderModal('${product.id}')" class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-widest py-2.5 rounded transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderShopPage(filterOpts = {}) {
+            let filtered = [...storeData.products];
+            if (filterOpts && filterOpts.gender) {
+                filtered = filtered.filter(p => p.gender.toLowerCase() === filterOpts.gender.toLowerCase());
+            }
+            return `
+                <div class="max-w-7xl mx-auto px-4 py-10">
+                    <h1 class="text-2xl font-brand font-bold mb-6 border-b pb-2">${filterOpts.gender ? filterOpts.gender + "'s Watches" : 'All Watches'}</h1>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${filtered.length ? filtered.map(p => renderProductCard(p)).join('') : '<p class="col-span-full text-center text-gray-400 py-10">No watches found in this section.</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProductDetailPage(productId) {
+            const product = storeData.products.find(p => p.id === productId);
+            if (!product) return `<div class="p-10 text-center">Watch not found. <a href="#" onclick="navigateTo('home')" class="underline">Go Home</a></div>`;
+            return `
+                <div class="max-w-5xl mx-auto px-4 py-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-gray-100 rounded border aspect-square">
+                            <img src="${product.images[0]}" class="w-full h-full object-cover rounded">
+                        </div>
+                        <div class="flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs text-akvello-gold font-bold font-mono uppercase">${product.gender} Collection</span>
+                                <h1 class="text-2xl font-brand font-bold text-akvello-charcoal my-2">${product.name}</h1>
+                                <p class="text-xl font-bold mb-4">Rs. ${(product.salePrice || product.price).toLocaleString()}</p>
+                                <p class="text-sm text-gray-600 mb-6 leading-relaxed">${product.description}</p>
+                            </div>
+                            <button onclick="openOrderModal('${product.id}')" class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-3 text-xs uppercase tracking-widest rounded transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> Order via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        
+        function renderAdminDashboard() {
+            return `
+                <div class="max-w-6xl mx-auto px-4 py-10 space-y-8">
+                    <div class="flex justify-between items-center border-b pb-4">
+                        <h1 class="text-2xl font-brand font-bold">ADMIN PANEL</h1>
+                        <button onclick="isAdminLoggedIn=false; navigateTo('home'); showToast('Logged out');" class="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded hover:bg-red-700">
+                            Logout <i class="fa-solid fa-right-from-bracket ml-1"></i>
+                        </button>
+                    </div>
+
+                    <!-- Add Watch Form -->
+                    <div class="bg-white p-6 border border-gray-200 rounded shadow-sm">
+                        <h3 class="font-brand font-bold text-base mb-4 text-akvello-goldDark"><i class="fa-solid fa-plus-circle mr-2"></i>ADD NEW WATCH</h3>
+                        <form onsubmit="handleAdminAddProduct(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                            <input type="text" id="add-prod-name" required placeholder="Watch Name *" class="border p-3 rounded">
+                            <select id="add-prod-gender" required class="border p-3 rounded bg-gray-50">
+                                <option value="Men">Men</option>
+                                <option value="Women">Women</option>
+                            </select>
+                            <input type="number" id="add-prod-price" required placeholder="Price (PKR) *" class="border p-3 rounded">
+                            <input type="number" id="add-prod-saleprice" placeholder="Sale Price (Optional)" class="border p-3 rounded">
+                            <input type="text" id="add-prod-img" required placeholder="Image URL (Direct Picture Link) *" class="border p-3 rounded lg:col-span-2">
+                            <textarea id="add-prod-desc" placeholder="Watch Description" class="sm:col-span-2 lg:col-span-3 border p-3 rounded" rows="2"></textarea>
+                            <button type="submit" class="sm:col-span-2 lg:col-span-3 bg-akvello-black hover:bg-akvello-gold hover:text-black text-white font-bold uppercase tracking-widest py-3 rounded transition-colors">
+                                PUBLISH WATCH LIVE
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Manage/Delete Catalog Table -->
+                    <div class="bg-white p-6 border border-gray-200 rounded shadow-sm">
+                        <h3 class="font-brand font-bold text-base mb-4">Manage Live Catalog (${storeData.products.length} Watches)</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100 border-b">
+                                        <th class="p-3">Image</th>
+                                        <th class="p-3">ID</th>
+                                        <th class="p-3">Watch Name</th>
+                                        <th class="p-3">Category</th>
+                                        <th class="p-3">Price</th>
+                                        <th class="p-3">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${storeData.products.length ? storeData.products.map(p => `
+                                        <tr class="border-b hover:bg-gray-50">
+                                            <td class="p-3"><img src="${p.images[0]}" class="w-10 h-10 object-cover rounded border"></td>
+                                            <td class="p-3 font-mono">${p.id}</td>
+                                            <td class="p-3 font-bold">${p.name}</td>
+                                            <td class="p-3">${p.gender}</td>
+                                            <td class="p-3">Rs. ${(p.salePrice || p.price).toLocaleString()}</td>
+                                            <td class="p-3">
+                                                <button onclick="deleteProduct('${p.id}')" class="text-red-600 font-bold hover:underline flex items-center gap-1">
+                                                    <i class="fa-solid fa-trash"></i> Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `).join('') : '<tr><td colspan="6" class="p-4 text-center text-gray-400">No watches in store.</td></tr>'}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleAdminAddProduct(e) {
+            e.preventDefault();
+            const newProd = {
+                id: 'AKV-' + Math.floor(100 + Math.random() * 900),
+                name: document.getElementById('add-prod-name').value,
+                gender: document.getElementById('add-prod-gender').value,
+                collection: 'New Arrivals',
+                price: parseFloat(document.getElementById('add-prod-price').value),
+                salePrice: document.getElementById('add-prod-saleprice').value ? parseFloat(document.getElementById('add-prod-saleprice').value) : null,
+                description: document.getElementById('add-prod-desc').value || 'Premium watch crafted for modern lifestyle.',
+                images: [document.getElementById('add-prod-img').value]
+            };
+            
+            storeData.products.unshift(newProd);
+            localStorage.setItem('akvello_products', JSON.stringify(storeData.products));
+            showToast('Watch Added Successfully!');
+            navigateTo('admin');
+        }
+
+        function deleteProduct(id) {
+            if(confirm('Are you sure you want to permanently delete this watch?')) {
+                storeData.products = storeData.products.filter(p => p.id !== id);
+                localStorage.setItem('akvello_products', JSON.stringify(storeData.products));
+                showToast('Watch Deleted Permanently!');
+                navigateTo('admin');
+            }
+        }
+
+       
+        navigateTo('home');
+    </script>
+</body>
+</html>
