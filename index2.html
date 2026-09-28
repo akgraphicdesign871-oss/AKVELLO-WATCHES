@@ -1,430 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AKVELLO Watches | Premium Watches for Men & Women</title>
-    <meta name="description" content="Shop AKVELLO Watches — stylish timepieces for men and women.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        akvello: {
-                            black: '#0D0D0D',
-                            charcoal: '#1A1A1A',
-                            darkGray: '#2A2A2A',
-                            gold: '#D4AF37',
-                            goldLight: '#F3E5AB',
-                            goldDark: '#AA820A',
-                            offwhite: '#FAFAFA',
-                            lightGray: '#F3F4F6'
-                        }
-                    },
-                    fontFamily: {
-                        cinzel: ['Cinzel', 'serif'],
-                        sans: ['Plus Jakarta Sans', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAFAFA; color: #1A1A1A; }
-        .font-brand { font-family: 'Cinzel', serif; }
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-        .whatsapp-float { animation: pulse-glow 2s infinite; }
-    </style>
-</head>
-<body class="bg-akvello-offwhite text-akvello-charcoal flex flex-col min-h-screen">
-
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
-
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/923164252822?text=Hello%20AKVELLO%20WATCHES!" target="_blank" 
-       class="whatsapp-float fixed bottom-6 left-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-2xl hover:scale-110 transition-transform duration-300" 
-       title="Chat with AKVELLO on WhatsApp">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
-    <!-- Top Banner -->
-    <div class="bg-akvello-black text-akvello-gold text-xs py-2 text-center tracking-widest uppercase border-b border-akvello-gold/20 flex justify-center items-center gap-2">
-        <span><i class="fa-solid fa-truck-fast text-akvello-gold mr-1"></i> EASY WHATSAPP ORDERING • CASH ON DELIVERY</span>
-    </div>
-
-    <!-- Navigation Bar -->
-    <header class="sticky top-0 z-40 bg-akvello-black text-white border-b border-akvello-gold/20 shadow-xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#" onclick="navigateTo('home'); return false;" class="text-2xl sm:text-3xl font-brand font-bold tracking-widest text-white flex items-center gap-2">
-                <span class="text-akvello-gold font-serif">AKVELLO</span> <span class="text-xs tracking-widest font-sans font-light hidden sm:inline-block border-l border-white/20 pl-2 text-gray-400">WATCHES</span>
-            </a>
-            <nav class="hidden lg:flex items-center space-x-8 text-xs uppercase tracking-widest font-medium">
-                <a href="#" onclick="navigateTo('home'); return false;" class="hover:text-akvello-gold transition-colors">Home</a>
-                <a href="#" onclick="filterAndNavigate('Men'); return false;" class="hover:text-akvello-gold transition-colors">Men</a>
-                <a href="#" onclick="filterAndNavigate('Women'); return false;" class="hover:text-akvello-gold transition-colors">Women</a>
-                <a href="#" onclick="navigateTo('shop'); return false;" class="hover:text-akvello-gold transition-colors">Collections</a>
-            </nav>
-            <div class="flex items-center space-x-5 text-lg">
-                <button onclick="openAdminModal()" class="hover:text-akvello-gold transition-colors text-sm border border-akvello-gold/40 px-2.5 py-1 rounded text-akvello-gold font-mono flex items-center gap-1">
-                    <i class="fa-solid fa-lock"></i> <span>Admin</span>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Dynamic Content Area -->
-    <main id="main-content" class="flex-grow"></main>
-
-    <!-- Footer -->
-    <footer class="bg-akvello-black text-white pt-12 pb-8 border-t border-akvello-gold/20 mt-16 text-center text-xs text-gray-400">
-        <p>&copy; 2026 AKVELLO WATCHES. All Rights Reserved.</p>
-    </footer>
-
-    <!-- Customer Order Form Modal -->
-    <div id="order-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white p-6 rounded-lg max-w-md w-full border border-akvello-gold relative shadow-2xl">
-            <button onclick="closeOrderModal()" class="absolute top-3 right-3 text-gray-400 hover:text-black text-sm">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h3 class="font-brand font-bold text-lg mb-1 text-center">Place Order on WhatsApp</h3>
-            <p id="order-watch-title" class="text-xs text-akvello-gold font-bold text-center mb-4"></p>
-            
-            <form onsubmit="handleWhatsAppOrder(event)" class="space-y-3 text-xs">
-                <input type="hidden" id="order-watch-id">
-                <div>
-                    <label class="block font-bold mb-1">Full Name *</label>
-                    <input type="text" id="cust-name" required placeholder="Ali Khan" class="w-full border p-2.5 rounded focus:outline-none focus:border-akvello-gold">
-                </div>
-                <div>
-                    <label class="block font-bold mb-1">Phone Number *</label>
-                    <input type="tel" id="cust-phone" required placeholder="03001234567" class="w-full border p-2.5 rounded focus:outline-none focus:border-akvello-gold">
-                </div>
-                <div>
-                    <label class="block font-bold mb-1">Complete Delivery Address *</label>
-                    <textarea id="cust-address" required rows="3" placeholder="House #, Street #, Sector/Area, City" class="w-full border p-2.5 rounded focus:outline-none focus:border-akvello-gold"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-3 rounded text-xs uppercase tracking-widest transition-colors flex items-center justify-center gap-2 mt-2">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Send Order On WhatsApp
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Password Protection Modal -->
-    <div id="admin-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white p-6 rounded-lg max-w-sm w-full border border-akvello-gold text-center relative shadow-2xl">
-            <button onclick="closeAdminModal()" class="absolute top-3 right-3 text-gray-400 hover:text-black text-sm">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="w-12 h-12 bg-akvello-black text-akvello-gold rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
-                <i class="fa-solid fa-user-shield"></i>
-            </div>
-            <h3 class="font-brand font-bold text-lg mb-1">Admin Verification</h3>
-            <p class="text-xs text-gray-500 mb-4">Enter master password to manage catalog</p>
-            <input type="password" id="admin-pass-input" placeholder="Enter Password" class="w-full border border-gray-300 rounded p-2.5 text-xs mb-3 text-center focus:outline-none focus:border-akvello-gold">
-            <p id="admin-pass-error" class="text-red-500 text-[11px] mb-3 hidden">Incorrect Password!</p>
-            <button onclick="verifyAdminPassword()" class="w-full bg-akvello-black text-white font-bold py-2.5 rounded text-xs uppercase tracking-widest hover:bg-akvello-gold hover:text-black transition-colors">
-                Login
-            </button>
-        </div>
-    </div>
-
-  
-    <script>
-        const ADMIN_PASSWORD = "akvello123";
-        const OWNER_WHATSAPP = "923164252822"; // Aapka WhatsApp Number
-        let isAdminLoggedIn = false;
-
-        const initialProducts = [
-       
-        ];
-
-        let storeData = {
-            products: JSON.parse(localStorage.getItem('akvello_products')) || initialProducts
-        };
-
-        function showToast(msg) {
-            const toast = document.createElement('div');
-            toast.className = 'bg-akvello-black border border-akvello-gold text-white text-xs px-4 py-3 rounded shadow-xl';
-            toast.innerText = msg;
-            document.getElementById('toast-container').appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
-        function navigateTo(view, param = null) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            const main = document.getElementById('main-content');
-            
-            switch(view) {
-                case 'home': main.innerHTML = renderHomepage(); break;
-                case 'shop': main.innerHTML = renderShopPage(param); break;
-                case 'product': main.innerHTML = renderProductDetailPage(param); break;
-                case 'admin': 
-                    if (!isAdminLoggedIn) {
-                        openAdminModal();
-                        return;
-                    }
-                    main.innerHTML = renderAdminDashboard(); 
-                    break;
-                default: main.innerHTML = renderHomepage();
-            }
-        }
-
-        function filterAndNavigate(gender) {
-            navigateTo('shop', { gender: gender });
-        }
-
-        function openAdminModal() {
-            if (isAdminLoggedIn) {
-                navigateTo('admin');
-                return;
-            }
-            document.getElementById('admin-modal').classList.remove('hidden');
-            document.getElementById('admin-pass-input').value = '';
-            document.getElementById('admin-pass-error').classList.add('hidden');
-            document.getElementById('admin-pass-input').focus();
-        }
-
-        function closeAdminModal() {
-            document.getElementById('admin-modal').classList.add('hidden');
-        }
-
-        function verifyAdminPassword() {
-            const entered = document.getElementById('admin-pass-input').value;
-            if (entered === ADMIN_PASSWORD) {
-                isAdminLoggedIn = true;
-                closeAdminModal();
-                showToast('Login Successful!');
-                navigateTo('admin');
-            } else {
-                document.getElementById('admin-pass-error').classList.remove('hidden');
-            }
-        }
-
-        
-        function openOrderModal(watchId) {
-            const product = storeData.products.find(p => p.id === watchId);
-            if (!product) return;
-            document.getElementById('order-watch-id').value = product.id;
-            document.getElementById('order-watch-title').innerText = `${product.name} — Rs. ${(product.salePrice || product.price).toLocaleString()}`;
-            document.getElementById('cust-name').value = '';
-            document.getElementById('cust-phone').value = '';
-            document.getElementById('cust-address').value = '';
-            document.getElementById('order-modal').classList.remove('hidden');
-        }
-
-        function closeOrderModal() {
-            document.getElementById('order-modal').classList.add('hidden');
-        }
-
-        function handleWhatsAppOrder(e) {
-            e.preventDefault();
-            const watchId = document.getElementById('order-watch-id').value;
-            const product = storeData.products.find(p => p.id === watchId);
-            
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            const address = document.getElementById('cust-address').value;
-            const price = product ? (product.salePrice || product.price) : 0;
-
-           
-            const message = `Hello AKVELLO WATCHES! I want to order this watch:%0A%0A` +
-                `⌚ *Watch Name:* ${product ? product.name : ''}%0A` +
-                `💰 *Price:* Rs. ${price.toLocaleString()}%0A` +
-                `👤 *Customer Name:* ${name}%0A` +
-                `📞 *Phone:* ${phone}%0A` +
-                `📍 *Delivery Address:* ${address}%0A%0A` +
-                `Please confirm my order!`;
-
-            closeOrderModal();
-            
-           
-            window.open(`https://wa.me/${OWNER_WHATSAPP}?text=${message}`, '_blank');
-        }
-
-        function renderHomepage() {
-            return `
-                <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 class="text-2xl font-brand font-bold mb-6 text-center text-akvello-charcoal">FEATURED TIMEPIECES</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${storeData.products.length ? storeData.products.map(p => renderProductCard(p)).join('') : '<p class="col-span-full text-center text-gray-400 py-10">No watches available right now.</p>'}
-                    </div>
-                </section>
-            `;
-        }
-
-        function renderProductCard(product) {
-            return `
-                <div class="bg-white rounded border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-                    <div class="relative aspect-square cursor-pointer bg-gray-100" onclick="navigateTo('product', '${product.id}')">
-                        <img src="${product.images[0]}" alt="${product.name}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow justify-between">
-                        <div>
-                            <span class="text-[10px] font-bold font-mono text-akvello-gold uppercase">${product.gender}</span>
-                            <h3 class="font-brand font-bold text-sm text-akvello-charcoal my-1">${product.name}</h3>
-                            <p class="text-xs text-gray-500 line-clamp-2">${product.description}</p>
-                        </div>
-                        <div class="mt-4">
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="text-base font-bold text-akvello-black">Rs. ${(product.salePrice || product.price).toLocaleString()}</span>
-                                ${product.salePrice ? `<span class="text-xs text-gray-400 line-through">Rs. ${product.price.toLocaleString()}</span>` : ''}
-                            </div>
-                            <button onclick="openOrderModal('${product.id}')" class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-widest py-2.5 rounded transition-colors flex items-center justify-center gap-2">
-                                <i class="fa-brands fa-whatsapp text-sm"></i> Order via WhatsApp
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderShopPage(filterOpts = {}) {
-            let filtered = [...storeData.products];
-            if (filterOpts && filterOpts.gender) {
-                filtered = filtered.filter(p => p.gender.toLowerCase() === filterOpts.gender.toLowerCase());
-            }
-            return `
-                <div class="max-w-7xl mx-auto px-4 py-10">
-                    <h1 class="text-2xl font-brand font-bold mb-6 border-b pb-2">${filterOpts.gender ? filterOpts.gender + "'s Watches" : 'All Watches'}</h1>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${filtered.length ? filtered.map(p => renderProductCard(p)).join('') : '<p class="col-span-full text-center text-gray-400 py-10">No watches found in this section.</p>'}
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderProductDetailPage(productId) {
-            const product = storeData.products.find(p => p.id === productId);
-            if (!product) return `<div class="p-10 text-center">Watch not found. <a href="#" onclick="navigateTo('home')" class="underline">Go Home</a></div>`;
-            return `
-                <div class="max-w-5xl mx-auto px-4 py-12">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="bg-gray-100 rounded border aspect-square">
-                            <img src="${product.images[0]}" class="w-full h-full object-cover rounded">
-                        </div>
-                        <div class="flex flex-col justify-between">
-                            <div>
-                                <span class="text-xs text-akvello-gold font-bold font-mono uppercase">${product.gender} Collection</span>
-                                <h1 class="text-2xl font-brand font-bold text-akvello-charcoal my-2">${product.name}</h1>
-                                <p class="text-xl font-bold mb-4">Rs. ${(product.salePrice || product.price).toLocaleString()}</p>
-                                <p class="text-sm text-gray-600 mb-6 leading-relaxed">${product.description}</p>
-                            </div>
-                            <button onclick="openOrderModal('${product.id}')" class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-3 text-xs uppercase tracking-widest rounded transition-colors flex items-center justify-center gap-2">
-                                <i class="fa-brands fa-whatsapp text-lg"></i> Order via WhatsApp
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        
-        function renderAdminDashboard() {
-            return `
-                <div class="max-w-6xl mx-auto px-4 py-10 space-y-8">
-                    <div class="flex justify-between items-center border-b pb-4">
-                        <h1 class="text-2xl font-brand font-bold">ADMIN PANEL</h1>
-                        <button onclick="isAdminLoggedIn=false; navigateTo('home'); showToast('Logged out');" class="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded hover:bg-red-700">
-                            Logout <i class="fa-solid fa-right-from-bracket ml-1"></i>
-                        </button>
-                    </div>
-
-                    <!-- Add Watch Form -->
-                    <div class="bg-white p-6 border border-gray-200 rounded shadow-sm">
-                        <h3 class="font-brand font-bold text-base mb-4 text-akvello-goldDark"><i class="fa-solid fa-plus-circle mr-2"></i>ADD NEW WATCH</h3>
-                        <form onsubmit="handleAdminAddProduct(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                            <input type="text" id="add-prod-name" required placeholder="Watch Name *" class="border p-3 rounded">
-                            <select id="add-prod-gender" required class="border p-3 rounded bg-gray-50">
-                                <option value="Men">Men</option>
-                                <option value="Women">Women</option>
-                            </select>
-                            <input type="number" id="add-prod-price" required placeholder="Price (PKR) *" class="border p-3 rounded">
-                            <input type="number" id="add-prod-saleprice" placeholder="Sale Price (Optional)" class="border p-3 rounded">
-                            <input type="text" id="add-prod-img" required placeholder="Image URL (Direct Picture Link) *" class="border p-3 rounded lg:col-span-2">
-                            <textarea id="add-prod-desc" placeholder="Watch Description" class="sm:col-span-2 lg:col-span-3 border p-3 rounded" rows="2"></textarea>
-                            <button type="submit" class="sm:col-span-2 lg:col-span-3 bg-akvello-black hover:bg-akvello-gold hover:text-black text-white font-bold uppercase tracking-widest py-3 rounded transition-colors">
-                                PUBLISH WATCH LIVE
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Manage/Delete Catalog Table -->
-                    <div class="bg-white p-6 border border-gray-200 rounded shadow-sm">
-                        <h3 class="font-brand font-bold text-base mb-4">Manage Live Catalog (${storeData.products.length} Watches)</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs border-collapse">
-                                <thead>
-                                    <tr class="bg-gray-100 border-b">
-                                        <th class="p-3">Image</th>
-                                        <th class="p-3">ID</th>
-                                        <th class="p-3">Watch Name</th>
-                                        <th class="p-3">Category</th>
-                                        <th class="p-3">Price</th>
-                                        <th class="p-3">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${storeData.products.length ? storeData.products.map(p => `
-                                        <tr class="border-b hover:bg-gray-50">
-                                            <td class="p-3"><img src="${p.images[0]}" class="w-10 h-10 object-cover rounded border"></td>
-                                            <td class="p-3 font-mono">${p.id}</td>
-                                            <td class="p-3 font-bold">${p.name}</td>
-                                            <td class="p-3">${p.gender}</td>
-                                            <td class="p-3">Rs. ${(p.salePrice || p.price).toLocaleString()}</td>
-                                            <td class="p-3">
-                                                <button onclick="deleteProduct('${p.id}')" class="text-red-600 font-bold hover:underline flex items-center gap-1">
-                                                    <i class="fa-solid fa-trash"></i> Delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    `).join('') : '<tr><td colspan="6" class="p-4 text-center text-gray-400">No watches in store.</td></tr>'}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function handleAdminAddProduct(e) {
-            e.preventDefault();
-            const newProd = {
-                id: 'AKV-' + Math.floor(100 + Math.random() * 900),
-                name: document.getElementById('add-prod-name').value,
-                gender: document.getElementById('add-prod-gender').value,
-                collection: 'New Arrivals',
-                price: parseFloat(document.getElementById('add-prod-price').value),
-                salePrice: document.getElementById('add-prod-saleprice').value ? parseFloat(document.getElementById('add-prod-saleprice').value) : null,
-                description: document.getElementById('add-prod-desc').value || 'Premium watch crafted for modern lifestyle.',
-                images: [document.getElementById('add-prod-img').value]
-            };
-            
-            storeData.products.unshift(newProd);
-            localStorage.setItem('akvello_products', JSON.stringify(storeData.products));
-            showToast('Watch Added Successfully!');
-            navigateTo('admin');
-        }
-
-        function deleteProduct(id) {
-            if(confirm('Are you sure you want to permanently delete this watch?')) {
-                storeData.products = storeData.products.filter(p => p.id !== id);
-                localStorage.setItem('akvello_products', JSON.stringify(storeData.products));
-                showToast('Watch Deleted Permanently!');
-                navigateTo('admin');
-            }
-        }
-
-       
-        navigateTo('home');
-    </script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AKVEELLO Watches</title>
+<meta name="description" content="AKVEELLO Watches: premium men's and women's watches. Advance payment via EasyPaisa or SadaPay, order on WhatsApp.">
+<meta property="og:title" content="AKVEELLO Watches"><meta property="og:description" content="Premium watches for men and women.">
+<style>
+:root{--bg:#f6f3ee;--card:#fff;--ink:#1b1712;--mut:#6f675b;--gold:#a8842f;--line:#e2dccf;--danger:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111010;--card:#1b1a18;--ink:#f1ece2;--mut:#a39a8a;--gold:#d4af5a;--line:#2e2b26;--danger:#ff8a80}}
+:root[data-theme="dark"]{--bg:#111010;--card:#1b1a18;--ink:#f1ece2;--mut:#a39a8a;--gold:#d4af5a;--line:#2e2b26;--danger:#ff8a80}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3,.logo{font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:.04em}
+a{color:inherit;text-decoration:none}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{max-width:1100px;margin:auto;padding:14px 18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.logo{font-size:22px;letter-spacing:.2em;color:var(--gold);margin-right:auto}
+nav{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;text-transform:uppercase;letter-spacing:.1em}
+nav a:hover{color:var(--gold)}
+main{max-width:1100px;margin:auto;padding:24px 18px 60px;min-height:70vh}
+.hero{padding:56px 0 40px;text-align:center}.hero h1{font-size:clamp(30px,6vw,52px);margin:0 0 12px}.hero p{color:var(--mut);margin:0 0 22px}
+.btn{display:inline-block;background:var(--gold);color:#111;border:0;padding:11px 22px;font:inherit;font-size:14px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.btn.o{background:none;color:var(--ink);border:1px solid var(--line)}.btn.d{background:none;color:var(--danger);border:1px solid var(--danger)}.btn.s{padding:6px 12px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .2s}.card:hover{transform:translateY(-3px)}
+.img{aspect-ratio:1;background:var(--line) center/cover;display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--mut);position:relative}
+.card .in{padding:12px 14px}.card h3{margin:0 0 4px;font-size:17px}.card s{color:var(--mut);font-size:13px}
+.tag{position:absolute;top:8px;left:8px;background:var(--gold);color:#111;font-size:11px;padding:2px 8px;text-transform:uppercase;letter-spacing:.08em}.tag.x{background:var(--danger);color:#fff;left:auto;right:8px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);padding:10px;border-radius:2px;width:100%}
+.tools input,.tools select{width:auto;flex:1;min-width:140px}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:700px){.two{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);padding:18px}
+.empty{text-align:center;color:var(--mut);padding:60px 10px;border:1px dashed var(--line)}
+.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}.stats .box b{display:block;font-size:28px;color:var(--gold);font-family:Georgia,serif}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}.tabs .btn.on{background:var(--gold);color:#111}
+#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:3px;opacity:0;transition:.3s;pointer-events:none;z-index:9}
+#toast.on{opacity:1}
+footer{border-top:1px solid var(--line);padding:26px 18px;text-align:center;color:var(--mut);font-size:14px}
+.note{font-size:13px;color:var(--mut)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+</style></head><body>
+<header><div class="bar"><a class="logo" href="#/" id="logo"></a>
+<nav><a href="#/">Home</a><a href="#/men">Men</a><a href="#/women">Women</a><a href="#/cart" id="cartl">Cart</a><a href="#/contact">Contact</a></nav></div></header>
+<main id="app"></main>
+<footer id="foot"></footer><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s);
+const e=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(_){return d}},
+set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(_){toast('Storage full. Use a smaller image.');return false}}};
+let P=ls.get('akv_p',[]),O=ls.get('akv_o',[]),C=ls.get('akv_c',[]),PW=ls.get('akv_pw',null);
+let S=Object.assign({store:'AKVEELLO Watches',phone:'03164252822',wa:'03164252822',email:'abdulkareemaslamworks@gmail.com',ep:'03164252822',sp:'03164252822',hero:'Timeless watches for every wrist.',contact:'Order on WhatsApp or call us any day.'},ls.get('akv_s',{}));
+const STAT=['Pending','Payment Verification','Confirmed','Processing','Shipped','Delivered','Cancelled'];
+let tab='dash',EID=null,IMG=null,DELID=null;
+const adm=()=>{try{return sessionStorage.getItem('akv_adm')==='1'}catch(_){return false}};
+const pkr=n=>'Rs '+Number(n).toLocaleString('en-PK');
+const eff=p=>p.sale&&p.sale<p.price?p.sale:p.price;
+const oos=p=>p.oos||p.stock<=0;
+const price=p=>p.sale&&p.sale<p.price?`<b>${pkr(p.sale)}</b> <s>${pkr(p.price)}</s>`:`<b>${pkr(p.price)}</b>`;
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400)}
+const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('akv:'+s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+const saveP=()=>ls.set('akv_p',P),saveO=()=>ls.set('akv_o',O),saveC=()=>{ls.set('akv_c',C);chrome()};
+function chrome(){$('#logo').textContent=S.store.toUpperCase();document.title=S.store;
+$('#cartl').textContent='Cart ('+C.reduce((a,c)=>a+c.q,0)+')';
+$('#foot').innerHTML=`${e(S.store)} · ${e(S.phone)} · ${e(S.email)}<br><a href="#/admin">Admin</a>`}
+function card(p){const o=oos(p);return `<a class="card" href="#/p/${p.id}"><div class="img" style="${p.img?`background-image:url('${p.img}')`:''}">${p.img?'':'⌚'}${p.isNew?'<span class="tag">New</span>':''}${o?'<span class="tag x">Sold out</span>':''}</div><div class="in"><h3>${e(p.name)}</h3>${price(p)}</div></a>`}
+function shop(list,title){const q=(window.Q||'').toLowerCase();let l=list.filter(p=>p.name.toLowerCase().includes(q));
+const s=window.SORT||'';if(s==='lo')l.sort((a,b)=>eff(a)-eff(b));if(s==='hi')l.sort((a,b)=>eff(b)-eff(a));if(window.INS)l=l.filter(p=>!oos(p));
+return `<h2>${title}</h2><div class="tools"><input id="q" placeholder="Search watches" value="${e(window.Q||'')}" oninput="Q=this.value;r(1)"><select onchange="SORT=this.value;r(1)"><option value="">Sort</option><option value="lo" ${s==='lo'?'selected':''}>Price: low to high</option><option value="hi" ${s==='hi'?'selected':''}>Price: high to low</option></select><label class="row" style="margin:0"><input type="checkbox" style="width:auto" ${window.INS?'checked':''} onchange="INS=this.checked;r(1)"> In stock</label></div>`+(l.length?`<div class="grid">${l.map(card).join('')}</div>`:`<div class="empty">No watches to show yet.</div>`)}
+function r(keep){chrome();const h=location.hash.replace('#/','').split('/'),a=$('#app');let v='';
+if(!keep){window.Q='';window.SORT='';window.INS=false}
+const k=h[0]||'';
+if(k===''){const f=P.filter(p=>p.feat||p.isNew).slice(0,8);v=`<section class="hero"><h1>${e(S.store)}</h1><p>${e(S.hero)}</p><a class="btn" href="#/men">Men</a> <a class="btn o" href="#/women">Women</a></section><h2>Featured</h2>`+(f.length?`<div class="grid">${f.map(card).join('')}</div>`:P.length?`<div class="grid">${P.slice(0,8).map(card).join('')}</div>`:'<div class="empty">Our collection is coming soon.</div>')}
+else if(k==='men'||k==='women'){v=shop(P.filter(p=>p.cat===k),k==='men'?"Men's Watches":"Women's Watches")}
+else if(k==='p'){const p=P.find(x=>x.id===h[1]);v=!p?'<div class="empty">Product not found.</div>':`<div class="two"><div class="img" style="${p.img?`background-image:url('${p.img}')`:''}">${p.img?'':'⌚'}</div><div><h1>${e(p.name)}</h1><p style="font-size:20px">${price(p)}</p><p class="note">${p.cat==='men'?"Men's":"Women's"} watch · ${oos(p)?'Out of stock':p.stock+' in stock'}</p><p>${e(p.desc)}</p><button class="btn" ${oos(p)?'disabled':''} onclick="add('${p.id}')">Add to cart</button></div></div>`}
+else if(k==='cart'){v='<h2>Your cart</h2>'+(C.length?cartHtml():'<div class="empty">Your cart is empty.</div>')}
+else if(k==='checkout'){v=C.length?checkout():'<div class="empty">Your cart is empty.</div>'}
+else if(k==='done'){v=done(h[1])}
+else if(k==='contact'){v=`<h2>Contact</h2><div class="box"><p>${e(S.contact)}</p><p>Phone: ${e(S.phone)}<br>WhatsApp: ${e(S.wa)}<br>Email: ${e(S.email)}</p><a class="btn" href="https://wa.me/${intl(S.wa)}" target="_blank" rel="noopener">Chat on WhatsApp</a></div>`}
+else if(k==='admin'){v=admin()}
+a.innerHTML=v;if(keep&&$('#q')){const q=$('#q');q.focus();q.setSelectionRange(q.value.length,q.value.length)}
+if(!keep)scrollTo(0,0)}
+const intl=n=>n.replace(/\D/g,'').replace(/^0/,'92');
+function add(id){const p=P.find(x=>x.id===id);const c=C.find(x=>x.id===id);const n=(c?c.q:0)+1;if(n>p.stock)return toast('Only '+p.stock+' in stock');c?c.q=n:C.push({id,q:1});saveC();toast('Added to cart')}
+function qty(id,d){const c=C.find(x=>x.id===id),p=P.find(x=>x.id===id);c.q+=d;if(c.q>p.stock){c.q=p.stock;toast('Stock limit reached')}if(c.q<=0)C=C.filter(x=>x.id!==id);saveC();r(1)}
+function cartRows(){return C.map(c=>({p:P.find(x=>x.id===c.id),q:c.q})).filter(x=>x.p)}
+function total(){return cartRows().reduce((a,x)=>a+eff(x.p)*x.q,0)}
+function cartHtml(){return `<div class="box scroll"><table>${cartRows().map(x=>`<tr><td>${e(x.p.name)}</td><td>${pkr(eff(x.p))}</td><td class="row"><button class="btn o s" onclick="qty('${x.p.id}',-1)">−</button>${x.q}<button class="btn o s" onclick="qty('${x.p.id}',1)">+</button></td><td>${pkr(eff(x.p)*x.q)}</td></tr>`).join('')}</table></div><p style="text-align:right;font-size:20px">Total: <b>${pkr(total())}</b></p><p style="text-align:right"><a class="btn" href="#/checkout">Checkout</a></p>`}
+function checkout(){return `<h2>Checkout</h2><div class="two"><form class="box" onsubmit="placeOrder(event)"><label>Full name</label><input name="n" required><label>Phone</label><input name="ph" required pattern="[0-9+ -]{10,15}" title="Enter a valid phone number"><label>City</label><input name="c" required><label>Address</label><textarea name="a" rows="3" required></textarea><label>Payment method (advance payment)</label><select name="m"><option>EasyPaisa</option><option>SadaPay</option></select><label>Transaction ID</label><input name="t" required><br><br><button class="btn">Place order</button></form><div class="box"><h3>Pay in advance</h3><p>Send <b>${pkr(total())}</b> to:</p><p>EasyPaisa: <b>${e(S.ep)}</b><br>SadaPay: <b>${e(S.sp)}</b></p><p class="note">Enter the transaction ID after paying. We verify it before dispatch.</p></div></div>`}
+function placeOrder(ev){ev.preventDefault();const f=new FormData(ev.target),rows=cartRows();
+for(const x of rows)if(x.q>x.p.stock)return toast(x.p.name+': not enough stock');
+const o={id:'AKV-'+(1000+O.length+1),date:new Date().toISOString(),name:f.get('n').trim(),phone:f.get('ph').trim(),city:f.get('c').trim(),addr:f.get('a').trim(),method:f.get('m'),txn:f.get('t').trim(),status:'Pending',total:total(),items:rows.map(x=>({name:x.p.name,q:x.q,price:eff(x.p)}))};
+rows.forEach(x=>x.p.stock-=x.q);O.unshift(o);if(!saveO())return;saveP();C=[];saveC();location.hash='#/done/'+o.id}
+function waLink(o){const t=`*New Order ${o.id}*\nName: ${o.name}\nPhone: ${o.phone}\nCity: ${o.city}\nAddress: ${o.addr}\n\nProducts:\n${o.items.map(i=>`- ${i.name} x${i.q} (${pkr(i.price*i.q)})`).join('\n')}\n\nTotal: ${pkr(o.total)}\nPayment: ${o.method} (Advance)\nTransaction ID: ${o.txn}`;return `https://wa.me/${intl(S.wa)}?text=${encodeURIComponent(t)}`}
+function done(id){const o=O.find(x=>x.id===id);return !o?'<div class="empty">Order not found on this device.</div>':`<div class="box" style="text-align:center"><h2>Order placed</h2><p>Your order ID is <b>${o.id}</b>. Total ${pkr(o.total)}.</p><p>Tap below to send the order details to us on WhatsApp so we can confirm it.</p><a class="btn" href="${waLink(o)}" target="_blank" rel="noopener">Order / Confirm on WhatsApp</a></div>`}
+/* ---------- admin ---------- */
+function admin(){
+if(!PW)return `<div class="box" style="max-width:380px;margin:auto"><h2>Set admin password</h2><form onsubmit="setPw(event)"><label>New password (min 8 characters)</label><input type="password" name="p" minlength="8" required><br><br><button class="btn">Save</button></form></div>`;
+if(!adm())return `<div class="box" style="max-width:380px;margin:auto"><h2>Admin login</h2><form onsubmit="login(event)"><label>Password</label><input type="password" name="p" required><br><br><button class="btn">Login</button></form></div>`;
+const t=[['dash','Dashboard'],['prod','Products'],['add','Add Product'],['ord','Orders'],['set','Settings']];
+return `<div class="tabs">${t.map(x=>`<button class="btn o s ${tab===x[0]?'on':''}" onclick="tab='${x[0]}';if(tab==='add')EID=null,IMG=null;r(1)">${x[1]}</button>`).join('')}<button class="btn d s" onclick="logout()">Logout</button></div>`+({dash,prod,add:form,ord,set}[tab])()}
+async function setPw(ev){ev.preventDefault();PW=await sha(new FormData(ev.target).get('p'));ls.set('akv_pw',PW);try{sessionStorage.setItem('akv_adm','1')}catch(_){}r()}
+async function login(ev){ev.preventDefault();if(await sha(new FormData(ev.target).get('p'))!==PW)return toast('Wrong password');try{sessionStorage.setItem('akv_adm','1')}catch(_){}r()}
+function logout(){try{sessionStorage.removeItem('akv_adm')}catch(_){}r()}
+function dash(){const c=s=>O.filter(o=>o.status===s).length;const b=(l,n)=>`<div class="box"><b>${n}</b>${l}</div>`;
+return `<div class="stats">${b('Products',P.length)}${b("Men's",P.filter(p=>p.cat==='men').length)}${b("Women's",P.filter(p=>p.cat==='women').length)}${b('Orders',O.length)}${STAT.map(s=>b(s,c(s))).join('')}</div>`}
+function prod(){return P.length?`<div class="box scroll"><table><tr><th>Product</th><th>Price</th><th>Stock</th><th></th></tr>${P.map(p=>`<tr><td>${e(p.name)}<br><span class="note">${p.cat}${p.feat?' · featured':''}${p.isNew?' · new':''}${p.oos?' · out of stock':''}</span></td><td>${price(p)}</td><td>${p.stock}</td><td class="row"><button class="btn o s" onclick="edit('${p.id}')">Edit</button><button class="btn d s" onclick="del('${p.id}')">${DELID===p.id?'Confirm delete?':'Delete'}</button></td></tr>`).join('')}</table></div>`:'<div class="empty">No products yet. Use Add Product.</div>'}
+function edit(id){EID=id;IMG=null;tab='add';r(1)}
+function del(id){if(DELID!==id){DELID=id;r(1);setTimeout(()=>{if(DELID===id){DELID=null;r(1)}},4000);return}DELID=null;P=P.filter(p=>p.id!==id);C=C.filter(c=>c.id!==id);saveP();saveC();toast('Deleted');r(1)}
+function form(){const p=P.find(x=>x.id===EID)||{cat:'men',stock:1};const ck=(n,v)=>`<label class="row" style="color:var(--ink)"><input type="checkbox" name="${n}" style="width:auto" ${v?'checked':''}> ${({feat:'Featured',isNew:'New arrival',oos:'Mark out of stock'})[n]}</label>`;
+return `<form class="box" onsubmit="saveProd(event)"><h3>${EID?'Edit':'Add'} product</h3><label>Name</label><input name="n" required value="${e(p.name)}"><div class="two"><div><label>Category</label><select name="c"><option value="men" ${p.cat==='men'?'selected':''}>Men</option><option value="women" ${p.cat==='women'?'selected':''}>Women</option></select></div><div><label>Stock</label><input name="s" type="number" min="0" required value="${p.stock}"></div><div><label>Price (PKR)</label><input name="pr" type="number" min="1" required value="${p.price??''}"></div><div><label>Sale price (optional)</label><input name="sa" type="number" min="0" value="${p.sale??''}"></div></div><label>Description</label><textarea name="d" rows="4">${e(p.desc)}</textarea><label>Image (replaces the current one)</label><input type="file" accept="image/*" onchange="pick(this)">${p.img?`<p class="row"><img src="${p.img}" width="70" alt=""> <button type="button" class="btn d s" onclick="rmImg()">Delete image</button></p>`:''}${ck('feat',p.feat)}${ck('isNew',p.isNew)}${ck('oos',p.oos)}<br><button class="btn">Save product</button></form>`}
+function pick(inp){const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);IMG=c.toDataURL('image/jpeg',.75);toast('Image ready')};im.src=rd.result};rd.readAsDataURL(f)}
+function rmImg(){const p=P.find(x=>x.id===EID);if(p){p.img='';saveP();r(1)}}
+function saveProd(ev){ev.preventDefault();const f=new FormData(ev.target);const pr=+f.get('pr'),sa=f.get('sa')?+f.get('sa'):0;
+if(sa&&sa>=pr)return toast('Sale price must be below the price');
+const d={name:f.get('n').trim(),cat:f.get('c'),stock:+f.get('s'),price:pr,sale:sa,desc:f.get('d').trim(),feat:!!f.get('feat'),isNew:!!f.get('isNew'),oos:!!f.get('oos')};
+const p=P.find(x=>x.id===EID);if(p){Object.assign(p,d);if(IMG)p.img=IMG}else P.unshift({id:'p'+Date.now().toString(36),img:IMG||'',...d});
+if(saveP()){toast('Product saved');EID=null;IMG=null;tab='prod';r(1)}}
+function ord(){return O.length?O.map(o=>`<details class="box" style="margin-bottom:10px"><summary><b>${o.id}</b> · ${e(o.name)} · ${pkr(o.total)} · ${o.status}</summary><p>${e(o.phone)} · ${e(o.city)}<br>${e(o.addr)}</p><p>${o.items.map(i=>`${e(i.name)} x${i.q}`).join('<br>')}</p><p>${e(o.method)} · Txn: <b>${e(o.txn)}</b></p><div class="row"><select style="width:auto" onchange="setSt('${o.id}',this.value)">${STAT.map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select><a class="btn o s" href="${waLink(o)}" target="_blank" rel="noopener">WhatsApp</a></div></details>`).join(''):'<div class="empty">No orders yet.</div>'}
+function setSt(id,s){const o=O.find(x=>x.id===id);if(s==='Cancelled'&&o.status!=='Cancelled')o.items.forEach(i=>{const p=P.find(x=>x.name===i.name);if(p)p.stock+=i.q});o.status=s;saveO();saveP();toast('Status updated');r(1)}
+function set(){const F=[['store','Store name'],['phone','Phone number'],['wa','WhatsApp number'],['email','Email'],['ep','EasyPaisa number'],['sp','SadaPay number'],['hero','Homepage text'],['contact','Contact information']];
+return `<form class="box" onsubmit="saveSet(event)"><h3>Settings</h3>${F.map(x=>`<label>${x[1]}</label><input name="${x[0]}" required value="${e(S[x[0]])}">`).join('')}<br><button class="btn">Save settings</button></form>`}
+function saveSet(ev){ev.preventDefault();new FormData(ev.target).forEach((v,k)=>S[k]=v.trim());ls.set('akv_s',S);toast('Settings saved');r(1)}
+addEventListener('hashchange',()=>r());r();
+</script></body></html>
